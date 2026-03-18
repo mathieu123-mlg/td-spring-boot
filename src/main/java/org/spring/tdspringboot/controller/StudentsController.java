@@ -2,6 +2,8 @@ package org.spring.tdspringboot.controller;
 
 import org.spring.tdspringboot.entity.Student;
 import org.spring.tdspringboot.service.StudentsService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,12 +20,21 @@ public class StudentsController {
     }
 
     @PostMapping("/students")
-    public List<Student> createStudents(@RequestBody List<Student> students) {
-        return studentsService.addStudents(students);
+    public ResponseEntity<List<Student>> createStudents(@RequestBody List<Student> students) {
+        if (students == null || students.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(studentsService.addStudents(students));
     }
 
     @GetMapping("/students")
-    public  List<Student> findAllStudents() {
-        return studentsService.findAllStudents();
+    public ResponseEntity<List<Student>> findAllStudents() {
+        List<Student> students = studentsService.findAllStudents();
+        if (students.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(students);
     }
 }
