@@ -1,13 +1,12 @@
 package org.spring.tdspringboot.controller;
 
+import jdk.jfr.ContentType;
 import org.spring.tdspringboot.entity.Student;
 import org.spring.tdspringboot.service.StudentsService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,7 +29,12 @@ public class StudentsController {
     }
 
     @GetMapping("/students")
-    public ResponseEntity<List<Student>> findAllStudents() {
+    public ResponseEntity<?> findAllStudents(
+            @RequestHeader(value = "Accept", defaultValue = MediaType.TEXT_PLAIN_VALUE) String acceptHeader
+    ) {
+        if (!acceptHeader.equals(MediaType.TEXT_PLAIN_VALUE)) {
+            return ResponseEntity.badRequest().body("Format non supporter");
+        }
         List<Student> students = studentsService.findAllStudents();
         if (students.isEmpty()) {
             return ResponseEntity.noContent().build();
