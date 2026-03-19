@@ -14,7 +14,13 @@ public class StudentsService {
     }
 
     public List<Student> addStudents(List<Student> studentList) {
-        students.addAll(studentList);
+        for (Student student : studentList) {
+            if (students.contains(student)) {
+                throw new RuntimeException("Student reference already exist");
+            } else {
+                students.add(student);
+            }
+        }
         return studentList;
     }
 

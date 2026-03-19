@@ -1,5 +1,7 @@
 package org.spring.tdspringboot.entity;
 
+import java.util.Objects;
+
 public class Student {
     private final String reference;
     private final String firstName;
@@ -20,6 +22,18 @@ public class Student {
     public String getLastName() { return lastName; }
 
     public int getAge() { return age; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return Objects.equals(reference, student.reference);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(reference);
+    }
 
     @Override
     public String toString() {
