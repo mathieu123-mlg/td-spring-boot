@@ -2,7 +2,6 @@ package org.spring.tdspringboot.controller;
 
 import org.spring.tdspringboot.entity.Student;
 import org.spring.tdspringboot.service.StudentsService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,13 +21,24 @@ public class StudentsController {
     }
 
     @PostMapping("/students")
-    public ResponseEntity<List<Student>> createStudents(@RequestBody List<Student> students) {
+    public ResponseEntity<?> createStudents(@RequestBody List<Student> students) {
         if (students == null || students.isEmpty()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity
+                    .status(400)
+                    .header("Content-Type", "application/json")
+                    .body("{\"message\":\"List of student is required\"}");
         }
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(studentsService.addStudents(students));
+        try {
+            return ResponseEntity
+                    .status(201)
+                    .header("Content-Type", "application/json")
+                    .body(studentsService.addStudents(students));
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .status(500)
+                    .header("Content-Type", "application/json")
+                    .body("{\"message\":\"%s\"}".formatted(e.getMessage()));
+        }
     }
 
     @GetMapping("/students")
