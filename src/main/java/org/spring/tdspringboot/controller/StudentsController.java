@@ -32,13 +32,13 @@ public class StudentsController {
     public ResponseEntity<?> findAllStudents(
             @RequestHeader(value = "Accept", defaultValue = MediaType.TEXT_PLAIN_VALUE) String acceptHeader
     ) {
-        if (!acceptHeader.equals(MediaType.TEXT_PLAIN_VALUE)) {
-            return ResponseEntity.badRequest().body("Format non supporter");
+        if (acceptHeader.equals(MediaType.TEXT_PLAIN_VALUE)) {
+            List<Student> students = studentsService.findAllStudents();
+            if (students.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(students.toString());
         }
-        List<Student> students = studentsService.findAllStudents();
-        if (students.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(students);
+        return ResponseEntity.badRequest().body("Format non supporter");
     }
 }
