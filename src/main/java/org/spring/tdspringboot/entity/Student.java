@@ -23,11 +23,6 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" +
-               "reference='" + reference + '\'' +
-               ", firstName='" + firstName + '\'' +
-               ", lastName='" + lastName + '\'' +
-               ", age=" + age +
-               '}';
+        return "{ "+ firstName + " " + lastName + " }";
     }
 }
