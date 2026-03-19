@@ -29,7 +29,7 @@ public class StudentsController {
     }
 
     @GetMapping("/students")
-    public ResponseEntity<?> findAllStudents(
+    public ResponseEntity<String> findAllStudents(
             @RequestHeader(value = "Accept", defaultValue = MediaType.TEXT_PLAIN_VALUE) String acceptHeader
     ) {
         if (acceptHeader.equals(MediaType.TEXT_PLAIN_VALUE)) {
